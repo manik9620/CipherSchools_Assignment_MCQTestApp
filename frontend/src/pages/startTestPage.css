@@ -1,0 +1,52 @@
+/* src/styles/startTestPage.css */
+
+.start-test-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  
+  .start-test-container h1 {
+    color: #333;
+  }
+  
+  .error-message {
+    color: red;
+    margin-top: 10px;
+  }
+  
+  .video-container {
+    margin: 20px auto;
+    border: 1px solid gray;
+    display: inline-block;
+    background: transparent;
+    position: relative;
+  }
+  
+  .video-element {
+    width: 500px;
+    height: 400px;
+    border: 1px solid gray;
+    background: transparent;
+  }
+  
+  .redirect-message {
+    margin-top: 10px;
+    color: #007bff;
+  }
+  
+  .start-test-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  
+  .start-test-button:hover {
+    background-color: #0056b3;
+  }
+  
