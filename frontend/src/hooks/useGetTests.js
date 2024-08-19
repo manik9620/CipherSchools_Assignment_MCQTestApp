@@ -7,7 +7,11 @@ const useGetTests = () => {
   useEffect(() => {
     const fetchTests = async () => {
       try {
-        const response = await fetch("http://localhost:1400/api/v1/test/tests");
+        const response = await fetch("http://localhost:1400/api/v1/test/tests",{
+          headers:{
+            Authorization: JSON.parse(localStorage.getItem("userInfo"))["token"]
+          }
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch tests");
         }

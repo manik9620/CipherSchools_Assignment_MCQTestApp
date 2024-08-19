@@ -1,0 +1,76 @@
+/* General Page Styles */
+.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+  }
+  
+  .login-page-container {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+  }
+  
+  .login-page h1 {
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    color: #333;
+  }
+  
+  .login-page p {
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  .login-page a {
+    color: #6e8efb;
+    text-decoration: none;
+  }
+  
+  .login-page a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Input Styles */
+  .input-group {
+    margin-bottom: 1rem;
+    margin-right: 1rem;
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  .input-group input:focus {
+    border-color: #6e8efb;
+    outline: none;
+  }
+  
+  /* Button Styles */
+  button {
+    background-color: #6e8efb;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button:hover {
+    background-color: #5a7dff;
+  }
+  

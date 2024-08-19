@@ -3,18 +3,18 @@ const mongoose = require("mongoose");
 const SubmissionSchema = new mongoose.Schema({
     testId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Test',
+      ref: 'tests',
       required: true,
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'Users',
       required: true,
     },
     selections: [{
       questionId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Question',
+        ref: 'questions',
         required: true,
       },
       option: {

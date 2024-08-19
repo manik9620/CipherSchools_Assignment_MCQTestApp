@@ -7,11 +7,11 @@ import {
 import LoginPage from "./pages/loginPage";
 import SignupPage from "./pages/signupPage";
 import HomePage from "./pages/homePage";
-import LandingPage from "./pages/landingPage";
 import StartTest from "./pages/startTestPage"; 
 import TestEnvironmentPage from "./pages/testEnvironmentPage";
 import ThankYouPage from "./pages/thankyouPage";
 import { useSelector } from "react-redux";
+import "./App.css"
 
 const App = () => {
   const { isAuthorized } = useSelector((e) => e.auth);
@@ -19,7 +19,7 @@ const App = () => {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: isAuthorized ? <HomePage /> : <LandingPage />,
+      element: isAuthorized ? <HomePage /> : <LoginPage />,
     },
     {
       path: "/login",
@@ -30,15 +30,15 @@ const App = () => {
       element: isAuthorized ? <Navigate to="/" /> : <SignupPage />,
     },
     {
-      path: "/start-test/:testId", // Add this route for starting the test
+      path: "/start-test/:id", 
       element: isAuthorized ? <StartTest /> : <Navigate to="/login" />,
     },
     {
-      path: "/test-environment",
+      path: "/test-environment/:id",
       element: isAuthorized ? <TestEnvironmentPage /> : <Navigate to="/login" />,
     },
     {
-      path: "/thank-you", // Route for the Thank You page
+      path: "/thank-you", 
       element: isAuthorized ? <ThankYouPage /> : <Navigate to="/login" />,
     },
   ]);

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import "./thankyouPage.css"
 
 const ThankYouPage = () => {
   const navigate = useNavigate();
-  const [timeLeft, setTimeLeft] = useState(20); // Initialize timer with 20 seconds
+  const [timeLeft, setTimeLeft] = useState(5); // Initialize timer with 20 seconds
 
   useEffect(() => {
     // Set up a timer that updates every second

@@ -1,80 +1,87 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import useGetTestDetails from "../hooks/useGetTestDetails";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import useSubmitTest from "../hooks/useSubmitTest";
 import "./testEnvironmentPage.css";
+import Webcam from "react-webcam";
 
 const TestEnvironmentPage = () => {
-  const id = '66c0ed45119ccc16846ecf53'; // Static ID for testing
+  const { id } = useParams();
   const testDetails = useGetTestDetails(id);
-  const [selectedAnswers, setSelectedAnswers] = useState({});
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // Track current question index
-  const [timeLeft, setTimeLeft] = useState(3600); // Set initial time left in seconds (1 hour)
-  const videoRef = useRef(null); // Ref for the video element
+  const [selectedAnswers, setSelectedAnswers] = useState([]);
+  const [reviewMarkedQuestions, setReviewMarkedQuestions] = useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(3600);
   const navigate = useNavigate();
+  const { submitTest } = useSubmitTest();
 
-  // Function to handle the timer
   useEffect(() => {
     if (timeLeft <= 0) {
-      // Handle the case when time runs out (e.g., submit the test automatically)
-      alert('Time is up!');
-      handleSubmitTest(); // Submit the test when time is up
+      alert("Time is up!");
+      handleSubmitTest();
       return;
     }
 
     const timerId = setInterval(() => {
-      setTimeLeft(timeLeft - 1);
+      setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
     }, 1000);
 
-    // Cleanup the interval on component unmount
     return () => clearInterval(timerId);
   }, [timeLeft]);
 
-  useEffect(() => {
-    // Start the video stream when the component mounts
-    const startCamera = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-          audio: true,
-        });
-
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          videoRef.current.play();
-        }
-      } catch (error) {
-        console.error("Error accessing camera:", error);
-      }
-    };
-
-    startCamera();
-
-    return () => {
-      // Cleanup the video stream when the component unmounts
-      if (videoRef.current && videoRef.current.srcObject) {
-        const stream = videoRef.current.srcObject;
-        const tracks = stream.getTracks();
-        tracks.forEach((track) => track.stop());
-      }
-    };
-  }, []);
-
   const handleOptionChange = (questionId, selectedOption) => {
-    setSelectedAnswers((prevAnswers) => ({
-      ...prevAnswers,
-      [questionId]: selectedOption,
-    }));
+    setSelectedAnswers((prevAnswers) => {
+      const currentTime = new Date();
+      const existingAnswerIndex = prevAnswers.findIndex(
+        (answer) => answer.questionId === questionId
+      );
+
+      if (existingAnswerIndex > -1) {
+        const updatedAnswers = [...prevAnswers];
+        updatedAnswers[existingAnswerIndex] = {
+          questionId,
+          option: selectedOption,
+          savedAt: currentTime,
+        };
+
+        // If the question is marked for review and now answered, unmark it
+        setReviewMarkedQuestions((prevMarked) =>
+          prevMarked.filter((id) => id !== questionId)
+        );
+
+        return updatedAnswers;
+      }
+
+      // If the question was marked for review and is now answered, unmark it
+      setReviewMarkedQuestions((prevMarked) =>
+        prevMarked.filter((id) => id !== questionId)
+      );
+
+      return [
+        ...prevAnswers,
+        { questionId, option: selectedOption, savedAt: currentTime },
+      ];
+    });
   };
 
+  const handleMarkForReview = (questionId) => {
+    setReviewMarkedQuestions((prevMarked) => {
+      if (prevMarked.includes(questionId)) {
+        return prevMarked.filter((id) => id !== questionId); // Unmark if already marked
+      }
+      return [...prevMarked, questionId]; // Mark for review
+    });
+  };
+  
+
   const handleResetAnswer = (questionId) => {
-    setSelectedAnswers((prevAnswers) => ({
-      ...prevAnswers,
-      [questionId]: "", // Reset the selected answer for the current question
-    }));
+    setSelectedAnswers((prevAnswers) =>
+      prevAnswers.filter((answer) => answer.questionId !== questionId)
+    );
   };
 
   const handleNavigationClick = (index) => {
-    setCurrentQuestionIndex(index); // Navigate to the selected question
+    setCurrentQuestionIndex(index);
   };
 
   const handleNextQuestion = () => {
@@ -90,93 +97,151 @@ const TestEnvironmentPage = () => {
   };
 
   const handleSubmitTest = () => {
-    // Stop video stream before navigating away
-    if (videoRef.current && videoRef.current.srcObject) {
-      const stream = videoRef.current.srcObject;
-      const tracks = stream.getTracks();
-      tracks.forEach((track) => track.stop());
-    }
+    const testId = id;
+    const selections = selectedAnswers;
 
-    navigate("/thank-you"); // Redirect to the thank-you page
+    submitTest(testId, selections).then(() => {
+      navigate("/thank-you");
+    });
   };
 
-  if (!testDetails) return <p>Loading...</p>;
+  if (
+    !testDetails ||
+    !testDetails.questions ||
+    testDetails.questions.length === 0
+  ) {
+    return <p>Loading...</p>;
+  }
 
-  const currentQuestion = testDetails.questions[currentQuestionIndex]; // Current question being displayed
+  const currentQuestion = testDetails.questions[currentQuestionIndex];
 
-  // Convert seconds to HH:MM:SS format
-  const formatTime = (seconds) => {
-    const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
-    const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
-    const s = String(seconds % 60).padStart(2, '0');
-    return `${h}:${m}:${s}`;
+  const formatTimeh = (seconds) => {
+    const h = String(Math.floor(seconds / 3600)).padStart(2, "0");
+    return `${h}  `;
+  };
+
+  const formatTimem = (seconds) => {
+    const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
+    return `${m}  `;
+  };
+  const formatTimes = (seconds) => {
+    const s = String(seconds % 60).padStart(2, "0");
+    return `${s}`;
   };
 
   return (
-    <div className="test-environment-container">
+    <div className="test-environment-container no-select">
       <div className="test-content">
         <div className="question-section">
-          <h1>{testDetails.title}</h1>
-          <p>{testDetails.descriptions}</p>
+          <div className="test-heading">
+            <h1>
+              {testDetails.title} <span>- {testDetails.descriptions}</span>
+            </h1>
+          </div>
+
           <div key={currentQuestion._id} className="question-container">
-            <h3>{`Q${currentQuestionIndex + 1}. ${currentQuestion.question}`}</h3> {/* Numbering added */}
+            <h3>{`Question ${currentQuestionIndex + 1}. `}</h3>
+            <hr />
+            <p>{currentQuestion.question}</p>
             {currentQuestion.options.map((option, optionIndex) => (
               <div key={optionIndex} className="option-container">
                 <input
                   type="radio"
                   name={`question-${currentQuestion._id}`}
                   value={option}
-                  checked={selectedAnswers[currentQuestion._id] === option}
-                  onChange={() => handleOptionChange(currentQuestion._id, option)}
+                  checked={selectedAnswers.find(
+                    (answer) =>
+                      answer.questionId === currentQuestion._id &&
+                      answer.option === option
+                  )}
+                  onChange={() =>
+                    handleOptionChange(currentQuestion._id, option)
+                  }
                 />
                 <label>{option}</label>
               </div>
             ))}
-            <div className="navigation-buttons">
+          </div>
+          <div className="navigation-buttons">
+            <button
+              className="mark-review-button"
+              onClick={() => handleMarkForReview(currentQuestion._id)}
+            >
+              {reviewMarkedQuestions.includes(currentQuestion._id)
+                ? "Unmark Review"
+                : "Mark for Review"}
+            </button>
             <button
               className="reset-button"
               onClick={() => handleResetAnswer(currentQuestion._id)}
             >
               Reset Answer
             </button>
-            
-              <button
-                className="navigation-button"
-                onClick={handlePreviousQuestion}
-                disabled={currentQuestionIndex === 0}
-              >
-                Previous
-              </button>
-              <button
-                className="navigation-button"
-                onClick={handleNextQuestion}
-                disabled={currentQuestionIndex === testDetails.questions.length - 1}
-              >
-                Next
-              </button>
+
+            <div className="prev-next-div">
+            <button
+              className="navigation-button navigation-button-prev"
+              onClick={handlePreviousQuestion}
+              disabled={currentQuestionIndex === 0}
+            >
+              Previous
+            </button>
+            <button
+              className="navigation-button navigation-button-next"
+              onClick={handleNextQuestion}
+              disabled={
+                currentQuestionIndex === testDetails.questions.length - 1
+              }
+            >
+              Next
+            </button>
             </div>
+
+            <button className="submit-button" onClick={handleSubmitTest}>
+              Submit Test
+            </button>
+          </div>
+          <div className="navigation-colors">
+            <p> <button className="Current"/><span>Current</span></p>
+            <p><button className="Answered"/><span>Answered</span></p>
+            <p><button className="Not-Attempted"/><span>Not Attempted</span></p>
+            <p><button className="Mark-For-Review"/><span>Mark For Review</span></p>
+            <p><button className="Answered-and-Mark-For-Review"/><span>Answered and Mark For Review</span></p>
           </div>
         </div>
         <div className="summary-section">
           <div className="timer">
+            <h1>Time Left</h1>
             <div className="timer-value">
-              {formatTime(timeLeft)}
+              <div className="time">
+                <p>{formatTimeh(timeLeft)}</p>
+                <p>hours</p>
+              </div>
+              <div className="time">
+                <p>{formatTimem(timeLeft)}</p>
+                <p>minutes</p>
+              </div>
+
+              <div className="time">
+                <p>{formatTimes(timeLeft)}</p>
+                <p>seconds</p>
+              </div>
             </div>
           </div>
 
-          <video
-            ref={videoRef}
-            className="video-element"
-            autoPlay
-            playsInline
-          ></video>
-          
           <div className="summary">
+            <h1>Questions</h1>
             <div className="navigation-grid">
               {testDetails.questions.map((_, index) => (
                 <div
                   key={index}
-                  className={`summary-item ${getSummaryClass(index, selectedAnswers, testDetails.questions)}`}
+                  className={`summary-item ${getSummaryClass(
+                    index,
+                    selectedAnswers,
+                    reviewMarkedQuestions,
+                    testDetails.questions,
+                    currentQuestionIndex
+                  )}`}
                   onClick={() => handleNavigationClick(index)}
                 >
                   {index + 1}
@@ -184,22 +249,43 @@ const TestEnvironmentPage = () => {
               ))}
             </div>
           </div>
-          <button className="submit-button" onClick={handleSubmitTest}>
-            Submit Test
-          </button>
+
+          <div className="camera-view">
+            <Webcam className="camera" width={"400px"} />
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-// Helper function to determine the class for summary items
-const getSummaryClass = (index, selectedAnswers, questions) => {
+const getSummaryClass = (
+  index,
+  selectedAnswers,
+  reviewMarkedQuestions,
+  questions,
+  currentQuestionIndex
+) => {
   const questionId = questions[index]._id;
-  if (selectedAnswers[questionId]) {
-    return 'answered'; // Green if answered
+  const isAnswered = selectedAnswers.find(
+    (answer) => answer.questionId === questionId
+  );
+  const isMarkedForReview = reviewMarkedQuestions.includes(questionId);
+  const isActive = index === currentQuestionIndex;
+
+  if (isMarkedForReview) {
+    return isAnswered ? "answered-marked-for-review" : "marked-for-review";
   }
-  return 'not-answered'; // Red if not answered
+
+  if (isAnswered) {
+    return "answered";
+  }
+
+  if (isActive) {
+    return "active-question"; // Highlight the active question in blue
+  }
+
+  return "not-answered";
 };
 
 export default TestEnvironmentPage;

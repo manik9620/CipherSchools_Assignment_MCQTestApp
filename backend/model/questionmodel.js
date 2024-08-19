@@ -12,7 +12,7 @@ const questionschema = new mongoose.Schema(
     }],
     testId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Test',
+      ref: 'tests',
       required: true,
     },
     marks: {

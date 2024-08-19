@@ -1,10 +1,19 @@
 const express = require("express");
-const { getAllTests,getTestDetails } = require("../controller/testController");
+const {
+  getAllTests,
+  getTestDetails,
+  submitTest,
+} = require("../controller/testController");
+
+const requireSignin= require("../middleware/authmiddleware");
+
 
 const testRouter = express.Router();
 
 testRouter.get("/tests", getAllTests);
 
-testRouter.get("/tests/:id", getTestDetails);
+testRouter.get("/tests/:id", requireSignin,getTestDetails);
 
-module.exports=testRouter;
+testRouter.post("/submit", requireSignin,submitTest);
+
+module.exports = testRouter;

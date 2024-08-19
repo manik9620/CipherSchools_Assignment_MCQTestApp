@@ -1,14 +1,20 @@
 // src/hooks/useGetTestDetails.js
 import { useState, useEffect } from "react";
 
-const useGetTestDetails = (testId) => {
+const useGetTestDetails = (id) => {
   const [testDetails, setTestDetails] = useState(null);
 
   useEffect(() => {
     const fetchTestDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:1400/api/v1/test/tests/${testId}`);
+        const response = await fetch(`http://localhost:1400/api/v1/test/tests/${id}`,{
+          headers:{
+            Authorization: JSON.parse(localStorage.getItem("userInfo"))["token"]
+          }
+        });
         const data = await response.json();
+
+        // console.log("data-------->>>>>>>>>",data)
 
 
         if (data.success) {
@@ -22,7 +28,7 @@ const useGetTestDetails = (testId) => {
     };
 
     fetchTestDetails();
-  }, [testId]);
+  }, [id]);
 
   return testDetails;
 };
