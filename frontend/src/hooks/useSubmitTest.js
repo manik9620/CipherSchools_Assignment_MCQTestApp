@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 const useSubmitTest = () => {
   const submitTest = async (testId, selections) => {
     try {
-      const response = await fetch("http://localhost:1400/api/v1/test/submit", {
+      const response = await fetch("https://mcqtestapp.onrender.com/api/v1/test/submit", {
         method: "POST", // Specify the HTTP method
         headers: {
           "Content-Type": "application/json", // Specify the content type

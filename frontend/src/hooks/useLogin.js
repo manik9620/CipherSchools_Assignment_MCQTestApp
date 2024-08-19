@@ -9,7 +9,7 @@ const useLogin = () => {
 
   const login = async ({ email, password }) => {
     try {
-      const res = await fetch(`http://localhost:1400/api/v1/auth/login`, {
+      const res = await fetch(`https://mcqtestapp.onrender.com/api/v1/auth/login`, {
         method: "POST",
         body: JSON.stringify({ email, password }),
         headers: {
