@@ -4,15 +4,15 @@ import "./thankyouPage.css"
 
 const ThankYouPage = () => {
   const navigate = useNavigate();
-  const [timeLeft, setTimeLeft] = useState(5); // Initialize timer with 20 seconds
+  const [timeLeft, setTimeLeft] = useState(5); // Initialize timer with 5 seconds
 
   useEffect(() => {
-    // Set up a timer that updates every second
     const timerId = setInterval(() => {
       setTimeLeft((prevTime) => {
         if (prevTime <= 1) {
           clearInterval(timerId); // Clear interval when time is up
           navigate('/'); // Redirect to home page
+          return 0; // Ensure timeLeft doesn't go negative
         }
         return prevTime - 1; // Decrease the time left
       });

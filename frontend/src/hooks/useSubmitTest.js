@@ -3,25 +3,25 @@ import { toast } from "react-toastify";
 const useSubmitTest = () => {
   const submitTest = async (testId, selections) => {
     try {
-      const response = await fetch("https://mcqtestapp.onrender.com/api/v1/test/submit", {
-        method: "POST", // Specify the HTTP method
+      const response = await fetch("http://localhost:1400/api/v1/test/submit", {
+        method: "POST", 
         headers: {
-          "Content-Type": "application/json", // Specify the content type
+          "Content-Type": "application/json", 
           Authorization: JSON.parse(localStorage.getItem("userInfo"))["token"]
         },
-        body: JSON.stringify({ testId, selections }), // Convert the body to JSON
+        body: JSON.stringify({ testId, selections }), 
       });
 
       if (!response.ok) {
-        throw new Error("Error submitting test"); // Throw an error if response is not ok
+        throw new Error("Error submitting test"); 
       }
 
-      const data = await response.json(); // Parse the JSON response
+      const data = await response.json(); 
       toast.success("Test Submitted Successfully");
-      return data; // Optionally return the response data
+      return data; 
     } catch (err) {
       toast.error("An unexpected error occurred");
-      console.error("Error submitting test:", err); // Log the error for debugging
+      console.error("Error submitting test:", err);
     }
   };
 
