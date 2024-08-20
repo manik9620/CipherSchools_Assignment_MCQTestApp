@@ -73,3 +73,9 @@
     background-color: #5a7dff;
   }
   
+  
+@media (max-width:480px){
+  .signup-page-container{
+    width: 270px;
+  }
+}

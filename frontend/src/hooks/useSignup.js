@@ -5,7 +5,7 @@ const useSignup = () => {
   const navigate = useNavigate();
   const signup = async ({ name, email, password }) => {
     try {
-      const res = await fetch(`http://localhost:1400/api/v1/auth/signup`, {
+      const res = await fetch(`https://mcqtestapp.onrender.com/api/v1/auth/signup`, {
         method: "POST",
         body: JSON.stringify({ name, email, password }),
         headers: {

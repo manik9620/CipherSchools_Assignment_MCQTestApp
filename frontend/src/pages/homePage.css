@@ -75,3 +75,16 @@
 .logout-button:hover {
   background-color: #e04343;
 }
+
+
+
+@media (max-width:480px){
+  .homepage-heading{
+    width: 100%;
+  }
+
+  .logout-button{
+    padding:  0.3rem 0.5rem;
+    margin-bottom: 0;
+  }
+}

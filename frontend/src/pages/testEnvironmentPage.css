@@ -403,3 +403,94 @@ h3 {
 .Answered-and-Mark-For-Review{
   background-color: orange;
 }
+
+@media (max-width: 480px) {
+  .test-environment-container {
+    font-size: 14px;
+    /* padding: 20px; */
+  }
+
+  .test-content {
+    flex-direction: column;
+    height: auto;
+    box-shadow: none;
+  }
+
+  .test-heading span{
+    display: none;
+  }
+
+  .question-section {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 10px;
+  }
+
+  .summary-section {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .timer {
+    height: auto;
+    margin-bottom: 20px;
+  }
+
+  .timer h1 {
+    font-size: 20px;
+  }
+
+  .timer-value {
+    font-size: 18px;
+  }
+
+  .summary {
+    height: auto;
+    padding: 10px;
+  }
+
+  .navigation-grid {
+    grid-template-columns: repeat(auto-fill, minmax(30px, 1fr));
+    padding: 0 20px;
+  }
+
+  .navigation-button {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  .prev-next-div {
+    width: 100%;
+    margin: 0;
+  }
+
+  .navigation-colors {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navigation-colors p {
+    margin-bottom: 10px;
+  }
+
+  .mark-review-button, .submit-button, .reset-button {
+    font-size: 14px;
+    padding: 10px 15px;
+  }
+
+  .video-element {
+    width: 100%;
+    height: auto;
+  }
+
+  .error-message {
+    font-size: 14px;
+  }
+
+  .summary-item {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
