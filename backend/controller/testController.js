@@ -72,7 +72,7 @@ const submitTest = async (req, res) => {
   }
 };
 
-cron.schedule("24 * * * *", async () => {
+cron.schedule("26 * * * *", async () => {
   try {
     const submissions = await SubmissionModel.find({ isDeleted: false })
       .populate("userId")
