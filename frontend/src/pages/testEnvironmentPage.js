@@ -11,6 +11,7 @@ const TestEnvironmentPage = () => {
   const [selectedAnswers, setSelectedAnswers] = useState([]);
   const [reviewMarkedQuestions, setReviewMarkedQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [timeLeft, setTimeLeft] = useState(3600);
   const navigate = useNavigate();
   const { submitTest } = useSubmitTest();
@@ -96,14 +97,24 @@ const TestEnvironmentPage = () => {
     }
   };
 
+  const handleOpenPopup = () => {
+    setIsPopupVisible(true);
+  };
+  
+  const handleClosePopup = () => {
+    setIsPopupVisible(false);
+  };
+  
   const handleSubmitTest = () => {
+    handleClosePopup();
     const testId = id;
     const selections = selectedAnswers;
-
+  
     submitTest(testId, selections).then(() => {
       navigate("/thank-you");
     });
   };
+  
 
   if (
     !testDetails ||
@@ -197,7 +208,7 @@ const TestEnvironmentPage = () => {
             </button>
             </div>
 
-            <button className="submit-button" onClick={handleSubmitTest}>
+            <button className="submit-button" onClick={handleOpenPopup}>
               Submit Test
             </button>
           </div>
@@ -255,6 +266,28 @@ const TestEnvironmentPage = () => {
           </div>
         </div>
       </div>
+
+      {isPopupVisible && (
+        <>
+          <div className="popup-overlay" />
+          <div className="popup">
+            <div className="popup-content">
+              <h2>Are you sure you want to submit?</h2>
+              <div className="popup-buttons">
+                <button className="cancel-button" onClick={handleClosePopup}>
+                  Cancel
+                </button>
+                <button
+                  className="confirm-button"
+                  onClick={handleSubmitTest}
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
@@ -282,7 +315,7 @@ const getSummaryClass = (
   }
 
   if (isActive) {
-    return "active-question"; // Highlight the active question in blue
+    return "active-question"; 
   }
 
   return "not-answered";

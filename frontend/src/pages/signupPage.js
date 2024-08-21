@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import useSignup from "../hooks/useSignup";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import "./signupPage.css"; // Ensure you create this CSS file
+import "./signupPage.css"; 
 
 const SignupPage = () => {
   const [name, setName] = useState("");
@@ -11,7 +11,7 @@ const SignupPage = () => {
   const { signup } = useSignup();
 
   const handleSubmit = () => {
-    const validation = true; // Add real validation logic
+    const validation = true; 
     if (validation) {
       signup({ name, email, password });
     } else {

@@ -154,13 +154,11 @@ h3 {
   margin-bottom: 30px;
 }
 
-.timer-value p{
-  font-family: "Syne",sans-serif;
+.timer-value p {
+  font-family: "Syne", sans-serif;
   font-weight: 400;
   line-height: 20px;
 }
-
-
 
 .summary {
   height: 30vh;
@@ -248,21 +246,18 @@ h3 {
   width: 100%;
 }
 
-.prev-next-div{
+.prev-next-div {
   display: flex;
   margin-left: 0 70px;
   width: 20%;
   gap: 10px;
 }
 
-
-
-
-.navigation-button-prev{
+.navigation-button-prev {
   border-radius: 30px 0 0 30px;
 }
 
-.navigation-button-next{
+.navigation-button-next {
   border-radius: 0 30px 30px 0;
 }
 
@@ -277,18 +272,16 @@ h3 {
 
 .navigation-colors {
   display: flex;
-  justify-content: space-around ;
+  justify-content: space-around;
   gap: 20px;
   background-color: #f0f0f0;
 }
 
-.navigation-colors p{
+.navigation-colors p {
   display: flex;
 }
 
-
-
-.navigation-colors button{
+.navigation-colors button {
   border-radius: 100px;
   padding: 7px 7px;
   margin: 2px 10px 20px 0;
@@ -306,14 +299,14 @@ h3 {
   transition: background 0.3s ease;
 }
 
-.mark-review-button:hover{
+.mark-review-button:hover {
   background-color: rgb(104, 68, 2);
 }
 
 /* Submit Button */
 .submit-button {
   padding: 12px 17px;
-  background:  #028912;
+  background: #028912;
   color: white;
   border: none;
   border-radius: 30px;
@@ -362,8 +355,7 @@ h3 {
   background: #460101;
 }
 
-
-.marked-for-review{
+.marked-for-review {
   background-color: yellow;
 }
 
@@ -378,30 +370,83 @@ h3 {
 }
 
 .active-question {
-  background-color: #007bff; 
+  background-color: #007bff;
   color: white;
 }
 
-
 /* Navigaiton Colors */
-.Current{
+.Current {
   background-color: #007bff;
 }
 
-.Answered{
+.Answered {
   background-color: green;
 }
 
-.Not-Attempted{
+.Not-Attempted {
   background-color: red;
 }
 
-.Mark-For-Review{
+.Mark-For-Review {
   background-color: yellow;
 }
 
-.Answered-and-Mark-For-Review{
+.Answered-and-Mark-For-Review {
   background-color: orange;
+}
+
+/* Overlay for the popup */
+.popup-overlay {
+  position: fixed; /* Ensure it covers the entire screen */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  z-index: 1000; /* Higher z-index to appear on top */
+}
+
+/* Popup container */
+.popup {
+  position: fixed; /* Fixed position to stay in place when scrolling */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Centering trick */
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1001; /* Higher than the overlay */
+  border-radius: 8px; /* Rounded corners */
+  width: 400px; /* Adjust as needed */
+  max-width: 90%; /* Responsive on smaller screens */
+}
+
+/* Popup content styles */
+.popup-content h2 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.popup-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.popup-buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.popup-buttons .cancel-button {
+  background-color: #a10000;
+  color: #ffffff;
+}
+
+.popup-buttons .confirm-button {
+  background-color: #02c057;
+  color: white;
 }
 
 @media (max-width: 480px) {
@@ -416,7 +461,7 @@ h3 {
     box-shadow: none;
   }
 
-  .test-heading span{
+  .test-heading span {
     display: none;
   }
 
@@ -425,6 +470,10 @@ h3 {
     border-right: none;
     border-bottom: 1px solid #e0e0e0;
     padding: 10px;
+  }
+
+  .question-container {
+    height: 35vh;
   }
 
   .summary-section {
@@ -455,9 +504,14 @@ h3 {
     padding: 0 20px;
   }
 
+  .navigation-buttons {
+
+    padding: 10px 0;
+    gap: 5px;
+  }
+  
   .navigation-button {
     font-size: 14px;
-    padding: 8px 12px;
   }
 
   .prev-next-div {
@@ -466,15 +520,26 @@ h3 {
   }
 
   .navigation-colors {
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
   }
 
   .navigation-colors p {
-    margin-bottom: 10px;
+    flex-direction: column;
+    text-align: center;
+    height: 100px;
+    height: 100%;
   }
 
-  .mark-review-button, .submit-button, .reset-button {
+  .navigation-colors p button {
+    width: 15px;
+    padding: 7px 1px;
+    margin: 10px 0 10px 25px;
+  }
+
+  .mark-review-button,
+  .submit-button,
+  .reset-button {
     font-size: 14px;
     padding: 10px 15px;
   }
@@ -492,5 +557,33 @@ h3 {
     font-size: 14px;
     padding: 8px;
   }
-}
 
+  .popup {
+    width: 60%;
+  }
+  .popup-content h2 {
+    font-size: 15px;
+  }
+  .popup-buttons button {
+    font-size: 15px;
+  }
+
+  .timer {
+    height: 14vh;
+  }
+  .navigation-grid {
+    gap: 15px 35px;
+    padding-left: 50px;
+    height: 13vh;
+  }
+
+  .summary-item {
+    padding: 1rem 1.7rem;
+  }
+  .camera {
+    height: 100%;
+    width: 90%;
+    margin-left: 20px;
+    border-radius: 10px;
+  }
+}
