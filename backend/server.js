@@ -4,6 +4,7 @@ const express = require("express");
 const authRouter = require("./routes/authRoutes.js");
 const testRouter=require("./routes/testRoutes.js")
 const cors = require("cors");
+const colors=require("colors");
 
 const app = express();
 
@@ -18,5 +19,5 @@ app.get("/", (req, res) => {
 
 
 app.listen(process.env.PORT, () => {
-  console.log("Server is running on port 5000");
+  console.log("Server is running on port 5000" .bgMagenta.white);
 });

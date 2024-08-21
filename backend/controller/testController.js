@@ -72,7 +72,7 @@ const submitTest = async (req, res) => {
   }
 };
 
-cron.schedule("16 * * * *", async () => {
+cron.schedule("0 * * * *", async () => {
   try {
     const submissions = await SubmissionModel.find({ isDeleted: false })
       .populate("userId")
@@ -200,8 +200,6 @@ const sendmail = async (email, total_score, score, testTitle) => {
         </html>
       `,
     };
-    
-    
 
     await transporter.sendMail(mailOptions);
     console.log("Email sent to:", email);
